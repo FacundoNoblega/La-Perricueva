@@ -28,34 +28,39 @@ body {
   --bg-end: #000c2a;
   --star-color: #fff;
   --accent-color: #d4af37; /* Dorado */
-  background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-mid) 50%, var(--bg-end) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--bg-start) 0%,
+    var(--bg-mid) 50%,
+    var(--bg-end) 100%
+  );
   position: relative;
 }
 
 /* === Fondos y colores por sección === */
 body.page-alimentos {
-  --accent-color: #4CAF50; /* Verde */
+  --accent-color: #4caf50; /* Verde */
   --bg-start: #0a1a0a;
   --bg-mid: #000c2a;
   --star-color: #e0f0e0;
 }
 
 body.page-cuidado {
-  --accent-color: #2196F3; /* Azul */
+  --accent-color: #2196f3; /* Azul */
   --bg-start: #0a0a1a;
   --bg-mid: #000c2a;
   --star-color: #e0eaff;
 }
 
 body.page-accesorios {
-  --accent-color: #FF9800; /* Naranja */
+  --accent-color: #ff9800; /* Naranja */
   --bg-start: #1a0a00;
   --bg-mid: #000c2a;
   --star-color: #ffe0c0;
 }
 
 body.page-venenos {
-  --accent-color: #F44336; /* Rojo */
+  --accent-color: #f44336; /* Rojo */
   --bg-start: #1a0a0a;
   --bg-mid: #000c2a;
   --star-color: #ffe0e0;
@@ -76,28 +81,100 @@ body::after {
 
 /* Estrellas */
 body::before {
-  background-image: radial-gradient(circle at 15% 25%, var(--star-color) 0.075rem, transparent 0.075rem), /* 1.2px */
-          radial-gradient(circle at 35% 45%, var(--star-color) 0.075rem, transparent 0.075rem),
-          radial-gradient(circle at 55% 65%, var(--star-color) 0.075rem, transparent 0.075rem),
-          radial-gradient(circle at 75% 85%, var(--star-color) 0.075rem, transparent 0.075rem),
-          radial-gradient(circle at 95% 15%, var(--star-color) 0.075rem, transparent 0.075rem),
-          radial-gradient(circle at 25% 75%, var(--star-color) 0.075rem, transparent 0.075rem),
-          radial-gradient(circle at 85% 35%, var(--star-color) 0.075rem, transparent 0.075rem),
-          radial-gradient(circle at 45% 20%, var(--star-color) 0.075rem, transparent 0.075rem);
+  background-image: radial-gradient(
+      circle at 15% 25%,
+      var(--star-color) 0.075rem,
+      transparent 0.075rem
+    ),
+    /* 1.2px */
+      radial-gradient(
+        circle at 35% 45%,
+        var(--star-color) 0.075rem,
+        transparent 0.075rem
+      ),
+    radial-gradient(
+      circle at 55% 65%,
+      var(--star-color) 0.075rem,
+      transparent 0.075rem
+    ),
+    radial-gradient(
+      circle at 75% 85%,
+      var(--star-color) 0.075rem,
+      transparent 0.075rem
+    ),
+    radial-gradient(
+      circle at 95% 15%,
+      var(--star-color) 0.075rem,
+      transparent 0.075rem
+    ),
+    radial-gradient(
+      circle at 25% 75%,
+      var(--star-color) 0.075rem,
+      transparent 0.075rem
+    ),
+    radial-gradient(
+      circle at 85% 35%,
+      var(--star-color) 0.075rem,
+      transparent 0.075rem
+    ),
+    radial-gradient(
+      circle at 45% 20%,
+      var(--star-color) 0.075rem,
+      transparent 0.075rem
+    );
   opacity: 0.6;
   animation: slowDrift 200s linear infinite;
 }
 
 /* Constelaciones */
 body::after {
-  background: radial-gradient(circle at 10% 20%, var(--accent-color) 0.156rem, transparent 0.156rem), /* 2.5px */
-          radial-gradient(circle at 12% 22%, var(--accent-color) 0.125rem, transparent 0.125rem), /* 2px */
-          radial-gradient(circle at 14% 20%, var(--accent-color) 0.156rem, transparent 0.156rem), /* 2.5px */
-          radial-gradient(circle at 12% 18%, var(--accent-color) 0.112rem, transparent 0.112rem), /* 1.8px */
-          radial-gradient(circle at 40% 60%, var(--accent-color) 0.137rem, transparent 0.137rem), /* 2.2px */
-          radial-gradient(circle at 42% 62%, var(--accent-color) 0.112rem, transparent 0.112rem), /* 1.8px */
-          radial-gradient(circle at 38% 62%, var(--accent-color) 0.112rem, transparent 0.112rem), /* 1.8px */
-          radial-gradient(circle at 40% 58%, var(--accent-color) 0.125rem, transparent 0.125rem);  /* 2px */
+  background: radial-gradient(
+      circle at 10% 20%,
+      var(--accent-color) 0.156rem,
+      transparent 0.156rem
+    ),
+    /* 2.5px */
+      radial-gradient(
+        circle at 12% 22%,
+        var(--accent-color) 0.125rem,
+        transparent 0.125rem
+      ),
+    /* 2px */
+      radial-gradient(
+        circle at 14% 20%,
+        var(--accent-color) 0.156rem,
+        transparent 0.156rem
+      ),
+    /* 2.5px */
+      radial-gradient(
+        circle at 12% 18%,
+        var(--accent-color) 0.112rem,
+        transparent 0.112rem
+      ),
+    /* 1.8px */
+      radial-gradient(
+        circle at 40% 60%,
+        var(--accent-color) 0.137rem,
+        transparent 0.137rem
+      ),
+    /* 2.2px */
+      radial-gradient(
+        circle at 42% 62%,
+        var(--accent-color) 0.112rem,
+        transparent 0.112rem
+      ),
+    /* 1.8px */
+      radial-gradient(
+        circle at 38% 62%,
+        var(--accent-color) 0.112rem,
+        transparent 0.112rem
+      ),
+    /* 1.8px */
+      radial-gradient(
+        circle at 40% 58%,
+        var(--accent-color) 0.125rem,
+        transparent 0.125rem
+      ); /* 2px */
   opacity: 0.25;
   animation: constellationDrift 180s linear infinite;
 }
@@ -124,10 +201,28 @@ body::after {
   animation: meteorFly 12s linear infinite;
 }
 
-.meteor:nth-child(1) { top: 20%; left: -0.625rem; animation-delay: 2s; } /* -10px */
-.meteor:nth-child(2) { top: 60%; left: -0.625rem; animation-delay: 7s; }
-.meteor:nth-child(3) { top: 10%; right: -0.625rem; animation: meteorFlyReverse 10s linear infinite; animation-delay: 12s; }
-.meteor:nth-child(4) { top: 80%; right: -0.625rem; animation: meteorFlyReverse 14s linear infinite; animation-delay: 18s; }
+.meteor:nth-child(1) {
+  top: 20%;
+  left: -0.625rem;
+  animation-delay: 2s;
+} /* -10px */
+.meteor:nth-child(2) {
+  top: 60%;
+  left: -0.625rem;
+  animation-delay: 7s;
+}
+.meteor:nth-child(3) {
+  top: 10%;
+  right: -0.625rem;
+  animation: meteorFlyReverse 10s linear infinite;
+  animation-delay: 12s;
+}
+.meteor:nth-child(4) {
+  top: 80%;
+  right: -0.625rem;
+  animation: meteorFlyReverse 14s linear infinite;
+  animation-delay: 18s;
+}
 
 /* === Contenido principal === */
 .main-content {
@@ -166,7 +261,12 @@ body::after {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.25),
+    transparent
+  );
   animation: shineTitle 6s linear infinite;
   pointer-events: none;
 }
@@ -209,8 +309,14 @@ body::after {
   z-index: 2;
 }
 
-.animals-runner::before { left: 0; background: linear-gradient(to right, #000c2a, transparent); }
-.animals-runner::after { right: 0; background: linear-gradient(to left, #000c2a, transparent); }
+.animals-runner::before {
+  left: 0;
+  background: linear-gradient(to right, #000c2a, transparent);
+}
+.animals-runner::after {
+  right: 0;
+  background: linear-gradient(to left, #000c2a, transparent);
+}
 
 .animal {
   display: inline-block;
@@ -220,14 +326,30 @@ body::after {
   position: relative;
 }
 
-.animal:nth-child(1) { animation-delay: -0s; }
-.animal:nth-child(2) { animation-delay: -2s; }
-.animal:nth-child(3) { animation-delay: -4s; }
-.animal:nth-child(4) { animation-delay: -6s; }
-.animal:nth-child(5) { animation-delay: -8s; }
-.animal:nth-child(6) { animation-delay: -10s; }
-.animal:nth-child(7) { animation-delay: -12s; }
-.animal:nth-child(8) { animation-delay: -14s; }
+.animal:nth-child(1) {
+  animation-delay: -0s;
+}
+.animal:nth-child(2) {
+  animation-delay: -2s;
+}
+.animal:nth-child(3) {
+  animation-delay: -4s;
+}
+.animal:nth-child(4) {
+  animation-delay: -6s;
+}
+.animal:nth-child(5) {
+  animation-delay: -8s;
+}
+.animal:nth-child(6) {
+  animation-delay: -10s;
+}
+.animal:nth-child(7) {
+  animation-delay: -12s;
+}
+.animal:nth-child(8) {
+  animation-delay: -14s;
+}
 
 .arsenal-section {
   padding: 5rem 0; /* 80px */
@@ -471,15 +593,13 @@ p {
   z-index: 2000; /* Nivel 2: El carrito */
   max-width: 22.5rem; /* 360px */
   width: 90vw;
-  box-shadow: 
-    0 0.625rem 1.875rem rgba(0,0,0,0.5), /* 10px 30px */
-    0 0 1.25rem rgba(212, 175, 55, 0.2); /* 20px */
+  box-shadow: 0 0.625rem 1.875rem rgba(0, 0, 0, 0.5),
+    /* 10px 30px */ 0 0 1.25rem rgba(212, 175, 55, 0.2); /* 20px */
   opacity: 0;
   transform: translateX(100%) scale(0.95);
   pointer-events: none;
-  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
-          opacity 0.4s ease,
-          box-shadow 0.3s ease;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    opacity 0.4s ease, box-shadow 0.3s ease;
 }
 
 .cart-summary.active {
@@ -551,7 +671,7 @@ p {
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
-  box-shadow: 0 0.125rem 0.375rem rgba(0,0,0,0.2); /* 2px 6px */
+  box-shadow: 0 0.125rem 0.375rem rgba(0, 0, 0, 0.2); /* 2px 6px */
 }
 
 .cart-btn:hover {
@@ -672,7 +792,7 @@ p {
   max-width: 37.5rem; /* 600px */
   width: 100%;
   position: relative;
-  box-shadow: 0 1.25rem 3.125rem rgba(0,0,0,0.5); /* 20px 50px */
+  box-shadow: 0 1.25rem 3.125rem rgba(0, 0, 0, 0.5); /* 20px 50px */
   border: 1px solid rgba(212, 175, 55, 0.2);
 }
 
@@ -781,59 +901,120 @@ p {
 
 /* === Animaciones === */
 @keyframes slowDrift {
-  0% { transform: translateX(0) translateY(0); }
-  100% { transform: translateX(-50%) translateY(-50%); }
+  0% {
+    transform: translateX(0) translateY(0);
+  }
+  100% {
+    transform: translateX(-50%) translateY(-50%);
+  }
 }
 
 @keyframes constellationDrift {
-  0% { transform: translateX(0) translateY(0); }
-  100% { transform: translateX(-66%) translateY(-66%); }
+  0% {
+    transform: translateX(0) translateY(0);
+  }
+  100% {
+    transform: translateX(-66%) translateY(-66%);
+  }
 }
 
 @keyframes meteorFly {
-  0% { opacity: 0; transform: translateX(0) translateY(0); }
-  10% { opacity: 1; }
-  90% { opacity: 0.8; }
-  100% { opacity: 0; transform: translateX(100vw) translateY(6.25rem); } /* 100px */
+  0% {
+    opacity: 0;
+    transform: translateX(0) translateY(0);
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(100vw) translateY(6.25rem);
+  } /* 100px */
 }
 
 @keyframes meteorFlyReverse {
-  0% { opacity: 0; transform: translateX(0) translateY(0); }
-  10% { opacity: 1; }
-  90% { opacity: 0.8; }
-  100% { opacity: 0; transform: translateX(-100vw) translateY(-6.25rem); } /* -100px */
+  0% {
+    opacity: 0;
+    transform: translateX(0) translateY(0);
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-100vw) translateY(-6.25rem);
+  } /* -100px */
 }
 
 @keyframes subtleSway {
-  0% { transform: rotateY(0deg); }
-  12.5% { transform: rotateY(-6deg); }
-  25% { transform: rotateY(0deg); }
-  37.5% { transform: rotateY(6deg); }
-  50% { transform: rotateY(0deg); }
-  62.5% { transform: rotateY(-6deg); }
-  75% { transform: rotateY(0deg); }
-  87.5% { transform: rotateY(6deg); }
-  100% { transform: rotateY(0deg); }
+  0% {
+    transform: rotateY(0deg);
+  }
+  12.5% {
+    transform: rotateY(-6deg);
+  }
+  25% {
+    transform: rotateY(0deg);
+  }
+  37.5% {
+    transform: rotateY(6deg);
+  }
+  50% {
+    transform: rotateY(0deg);
+  }
+  62.5% {
+    transform: rotateY(-6deg);
+  }
+  75% {
+    transform: rotateY(0deg);
+  }
+  87.5% {
+    transform: rotateY(6deg);
+  }
+  100% {
+    transform: rotateY(0deg);
+  }
 }
 
 @keyframes shineTitle {
-  0% { left: -100%; }
-  100% { left: 100%; }
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
 }
 
 @keyframes breatheText {
-  0%, 100% { opacity: 0.7; transform: translateY(0); }
-  50% { opacity: 1; transform: translateY(-0.125rem); } /* 2px */
+  0%,
+  100% {
+    opacity: 0.7;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-0.125rem);
+  } /* 2px */
 }
 
 @keyframes run {
-  0% { transform: translateX(-100vw); }
-  100% { transform: translateX(100vw); }
+  0% {
+    transform: translateX(-100vw);
+  }
+  100% {
+    transform: translateX(100vw);
+  }
 }
 
 /* Efecto de botón "Agregar" activo durante 300ms */
 .add-to-cart-btn.active {
-  background: #4CAF50 !important;
+  background: #4caf50 !important;
   color: white !important;
   transform: scale(1.05);
   box-shadow: 0 0 0.75rem rgba(76, 175, 80, 0.6); /* 12px */
@@ -870,14 +1051,14 @@ p {
 .category-filter {
   display: flex;
   justify-content: center;
-  flex-wrap: wrap; 
+  flex-wrap: wrap;
   gap: 0.625rem; /* 10px */
   margin: 1.25rem auto; /* 20px */
   max-width: 90%;
 }
 
 .filter-btn {
-  background-color: rgba(255, 255, 255, 0.1); 
+  background-color: rgba(255, 255, 255, 0.1);
   border: 1px solid #d4af37;
   color: #d4af37;
   padding: 0.5rem 1rem; /* 8px 16px */
@@ -888,7 +1069,7 @@ p {
 }
 
 .filter-btn:hover {
-  background-color: rgba(212, 175, 55, 0.2); 
+  background-color: rgba(212, 175, 55, 0.2);
   transform: translateY(-0.125rem); /* 2px */
 }
 
@@ -897,7 +1078,6 @@ p {
   color: #12121a;
   box-shadow: 0 0 0.625rem rgba(212, 175, 55, 0.5); /* 10px */
 }
-
 
 /* === Consultas de medios para Responsividad === */
 
@@ -918,7 +1098,8 @@ p {
     font-size: 1.2rem; /* Achicamos texto específico */
   }
 
-  .arsenal-grid, .product-grid {
+  .arsenal-grid,
+  .product-grid {
     /* Pasa a 1 sola columna */
     grid-template-columns: 1fr;
   }
@@ -944,5 +1125,70 @@ p {
   .product-page-header img {
     margin-right: 0;
     margin-bottom: 1rem;
+  }
+
+  /* 2. Pantallas de móvil */
+  @media (max-width: 600px) {
+    html {
+      font-size: 90%;
+    }
+
+    .impact-text {
+      font-size: 1.2rem; /* Achicamos texto específico */
+      /* === Ajuste AÑADIDO === */
+      margin-bottom: 3rem; /* Separa el eslogan de los iconos inferiores */
+      margin-top: 0.5rem; /* Reduce margen negativo */
+    }
+
+    .arsenal-grid,
+    .product-grid {
+      grid-template-columns: 1fr;
+    }
+
+    /* ... otros estilos existentes ... */
+
+    /* === AJUSTES PARA LA PANTALLA DE INICIO (.hero) === */
+
+    .hero {
+      /* Reducimos la altura mínima para darle más aire */
+      min-height: 90vh;
+      /* Aumentamos el padding vertical para más espacio arriba y abajo */
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+
+    .hero-logo {
+      /* Reducimos el ancho máximo para que la imagen sea más pequeña. */
+      max-width: 300px;
+      /* Reducimos el margen negativo para que suba un poco menos */
+      margin-top: -3rem;
+    }
+
+    .animals-runner {
+      /* Aseguramos que ocupe todo el ancho disponible, sin desbordar por paddings */
+      width: 100%;
+      /* Si notas que el corte está en los bordes por los pseudoelementos (gradientes),
+         puedes intentar reducir su ancho aquí si es necesario, aunque normalmente
+         no deberían cortar el contenido. */
+      /* height: 3rem; /* Mantener si el anterior ajuste funcionó bien */
+    }
+
+    .animal {
+      /* Reducir AÚN MÁS el tamaño del ícono (era 1.8rem, ahora más pequeño) */
+      font-size: 1.5rem; /* Prueba con 1.5rem o incluso 1.4rem */
+
+      /* Reducir AÚN MÁS el margen horizontal (era 0.5rem, ahora más pegados) */
+      margin: 0 0.4rem; /* Prueba con 0.4rem o 0.3rem */
+
+      /* Ajuste opcional: centrar verticalmente si se ve descentrado */
+      vertical-align: middle;
+    }
+
+    /* Opcional: Ajustar los pseudoelementos (los gradientes de fade)
+     Si los gradientes están cortando los animales, podemos hacerlos más estrechos */
+    .animals-runner::before,
+    .animals-runner::after {
+      width: 3rem; /* Era 6.25rem (100px), reducir a 3rem (48px) o menos */
+    }
   }
 }

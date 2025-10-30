@@ -1,35 +1,36 @@
 // src/pages/Layout.jsx
-// --- VERSIÓN SIMPLE (Sin 'className' dinámico) ---
+import React from "react";
+import { Outlet } from "react-router-dom";
+import "../styles/global.css";
 
-import React from 'react';
-import { Outlet } from 'react-router-dom';
-import '../styles/global.css';
-
-// Asegúrate que la ruta a tu componente sea correcta
-import { CartSidebar } from '../context/CartSidebar.jsx'; 
+// 1. IMPORTAMOS LOS COMPONENTES
+// Asegúrate que la ruta sea correcta. La tuya era '../context/CartSidebar.jsx'
+// pero el archivo que me pasaste estaba en 'components'. La corrijo:
+import { CartSidebar } from "../context/CartSidebar.jsx";
+import { ProductModal } from "../context/ProductModal.jsx"; // Importamos el Modal
 
 const Layout = () => {
-
   return (
-    // Esta es la clase estática original
-    <div className="cosmic-universe">
-      
-      {/* El carrito ahora se renderiza aquí */}
-      {/* Pásale el pageTitle o quítalo si 'sendToWhatsApp' ya no lo necesita */}
+    // 2. USAMOS UN FRAGMENT (<>) para no añadir divs innecesarios
+    <>
+      {/* 3. RENDERIZAMOS LOS ELEMENTOS FLOTANTES (FIJOS) PRIMERO */}
+      {/* Estos tienen position:fixed y z-index alto */}
       <CartSidebar pageTitle="La Perricueva" />
-
+      <ProductModal /> {/* <-- El Modal ahora vive aquí, globalmente */}
+      {/* 4. AÑADIMOS LOS METEORITOS (también fijos) */}
       <div className="meteor-container">
         <div className="meteor"></div>
         <div className="meteor"></div>
         <div className="meteor"></div>
         <div className="meteor"></div>
       </div>
-
-      {/* Contenido dinámico de cada página */}
+      {/* 5. RENDERIZAMOS EL CONTENIDO PRINCIPAL */}
+      {/* Este div tiene position:relative y z-index:1 */}
       <div className="main-content">
+        {/* Aquí se renderiza Index.jsx, Alimentos.jsx, etc. */}
         <Outlet />
       </div>
-    </div>
+    </>
   );
 };
 
