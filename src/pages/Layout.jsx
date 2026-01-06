@@ -30,7 +30,7 @@ const Layout = () => {
       {/* Header Fijo */}
       <header className="main-header">
         <div className="logo">
-          <h1>La Perricueva</h1>
+          <h1></h1>
         </div>
         <nav>
           <Link to="/">Inicio</Link>
