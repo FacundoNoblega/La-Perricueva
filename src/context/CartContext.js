@@ -1,6 +1,4 @@
 // src/context/CartContext.js
-// --- VERSIÓN CORRECTA (La que SÍ "Salta") ---
-
 import React, { createContext, useState, useEffect, useContext } from "react";
 
 const CartContext = createContext();
@@ -11,32 +9,47 @@ export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState(
     () => JSON.parse(localStorage.getItem("cart")) || []
   );
-  const [activeButton, setActiveButton] = useState(null);
+
+  // Estado para la notificación (Toast)
+  const [notification, setNotification] = useState({
+    show: false,
+    message: "",
+  });
 
   useEffect(() => localStorage.setItem("cart", JSON.stringify(cart)), [cart]);
 
-  const addToCart = (productName, variation, price) => {
+  // AHORA RECIBE 'quantity' (por defecto 1 si no se pasa nada)
+  const addToCart = (productName, variation, price, quantity = 1) => {
     const key = `${productName}(${variation})`;
+
     setCart((prev) => {
       const existing = prev.find((item) => item.key === key);
       if (existing) {
         return prev.map((item) =>
-          item.key === key ? { ...item, quantity: item.quantity + 1 } : item
+          item.key === key
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
         );
       } else {
         return [
           ...prev,
-          { key, name: productName, variation, price, quantity: 1 },
+          { key, name: productName, variation, price, quantity: quantity },
         ];
       }
     });
 
-    // --- ¡¡ESTA ES LA LÍNEA MÁGICA QUE QUIERES!! ---
-    // Esto hace que el carrito "salte" (se abra)
-    document.getElementById("cart-summary")?.classList.add("active");
+    // 1. YA NO ABRIMOS EL CARRITO AUTOMÁTICAMENTE
+    // document.getElementById("cart-summary")?.classList.add("active"); <-- ELIMINADO
 
-    setActiveButton(key);
-    setTimeout(() => setActiveButton(null), 300);
+    // 2. ACTIVAMOS LA NOTIFICACIÓN
+    showNotification(`¡Agregaste ${quantity} x ${productName} (${variation})!`);
+  };
+
+  const showNotification = (msg) => {
+    setNotification({ show: true, message: msg });
+    setTimeout(() => {
+      setNotification({ show: false, message: "" });
+    }, 3000); // Se va a los 3 segundos
   };
 
   const updateQuantity = (key, delta) => {
@@ -57,7 +70,7 @@ export const CartProvider = ({ children }) => {
       `Pedido desde ${pageTitle}:\n` +
       cart.map((item) => `• ${item.key} x${item.quantity}`).join("\n");
     window.open(
-      `https://wa.me/5493834240185?text=${encodeURIComponent(msg)}`,
+      `https://wa.me/5493834701332?text=${encodeURIComponent(msg)}`,
       "_blank"
     );
   };
@@ -67,7 +80,7 @@ export const CartProvider = ({ children }) => {
   const value = {
     cart,
     total,
-    activeButton,
+    notification, // Exportamos la notificación para usarla en el Layout
     addToCart,
     updateQuantity,
     clearCart,
