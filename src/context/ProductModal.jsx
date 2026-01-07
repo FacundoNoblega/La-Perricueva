@@ -3,27 +3,63 @@ import React, { useState } from "react";
 import { useProducts } from "../context/ProductContext.js";
 import { useCart } from "../context/CartContext.js";
 
-// --- SUB-COMPONENTE: FILA DE VARIACIÓN CON SELECTOR DE CANTIDAD ---
+// --- SUB-COMPONENTE: FILA DE VARIACIÓN CON CONTROL DE STOCK ---
 const VariationRow = ({ product, variation, onAdd }) => {
   const [qty, setQty] = useState(1);
 
+  // Leemos el stock desde el producto (que viene de Airtable)
+  // Si no viniera el dato, asumimos 0 para no romper nada
+  const maxStock = product.stock !== undefined ? product.stock : 0;
+
   const handleRestar = (e) => {
-    e.stopPropagation(); // Evita que el clic cierre el modal
+    e.stopPropagation();
     if (qty > 1) setQty(qty - 1);
   };
 
   const handleSumar = (e) => {
     e.stopPropagation();
-    setQty(qty + 1);
+    // SOLO suma si no nos pasamos del stock
+    if (qty < maxStock) {
+      setQty(qty + 1);
+    }
   };
 
   const handleAgregar = (e) => {
     e.stopPropagation();
-    // Enviamos al carrito: Nombre, Variación, Precio y CANTIDAD
-    onAdd(product.nombre, variation.value, variation.precio, qty);
-    setQty(1); // Reseteamos el contador a 1 después de agregar
+    // Pasamos el stock máximo al carrito para que valide también
+    onAdd(product.nombre, variation.value, variation.precio, qty, maxStock);
+    setQty(1);
   };
 
+  // CASO 1: NO HAY STOCK (Producto Agotado)
+  if (maxStock <= 0) {
+    return (
+      <div
+        className="variation-card disabled"
+        style={{ opacity: 0.5, pointerEvents: "none" }}
+      >
+        <h3>
+          {variation.key}: {variation.value}
+        </h3>
+        <div className="price" style={{ color: "#888" }}>
+          SIN STOCK
+        </div>
+        <button
+          className="add-to-cart-btn"
+          disabled
+          style={{
+            background: "#444",
+            border: "1px solid #666",
+            color: "#aaa",
+          }}
+        >
+          Agotado
+        </button>
+      </div>
+    );
+  }
+
+  // CASO 2: HAY STOCK (Normal)
   return (
     <div className="variation-card">
       <h3>
@@ -31,15 +67,35 @@ const VariationRow = ({ product, variation, onAdd }) => {
       </h3>
       <div className="price">${variation.precio.toLocaleString()}</div>
 
-      {/* Selector de Cantidad Estilizado (Círculos Dorados) */}
+      {/* Selector de Cantidad */}
       <div className="qty-selector">
         <button onClick={handleRestar} className="qty-btn">
           -
         </button>
+
         <span className="qty-value">{qty}</span>
-        <button onClick={handleSumar} className="qty-btn">
+
+        {/* Deshabilitamos el + si llegamos al tope */}
+        <button
+          onClick={handleSumar}
+          className="qty-btn"
+          disabled={qty >= maxStock}
+          style={qty >= maxStock ? { opacity: 0.3, cursor: "not-allowed" } : {}}
+        >
           +
         </button>
+      </div>
+
+      {/* Aviso de stock restante */}
+      <div
+        style={{
+          fontSize: "0.8rem",
+          color: "#aaa",
+          marginBottom: "10px",
+          fontStyle: "italic",
+        }}
+      >
+        (Disponibles: {maxStock})
       </div>
 
       <button className="add-to-cart-btn" onClick={handleAgregar}>
@@ -54,12 +110,10 @@ export const ProductModal = () => {
   const { selectedProduct, closeModal } = useProducts();
   const { addToCart } = useCart();
 
-  // Si no hay producto seleccionado, no renderizamos nada
   if (!selectedProduct) return null;
 
   return (
     <div className="product-modal-overlay" onClick={closeModal}>
-      {/* stopPropagation evita que al hacer clic DENTRO del modal, se cierre */}
       <div className="product-modal" onClick={(e) => e.stopPropagation()}>
         <button className="modal-close" onClick={closeModal}>
           &times;
@@ -75,7 +129,6 @@ export const ProductModal = () => {
 
         <p>{selectedProduct.descripcion}</p>
 
-        {/* Mensaje si no hay variaciones/stock */}
         {selectedProduct.variaciones.length === 0 && (
           <div
             className="no-variations-message"
@@ -85,7 +138,6 @@ export const ProductModal = () => {
           </div>
         )}
 
-        {/* Lista de Variaciones (Kilos, Tallas, etc.) */}
         <div className="product-variations">
           {selectedProduct.variaciones.map((v, i) => (
             <VariationRow
