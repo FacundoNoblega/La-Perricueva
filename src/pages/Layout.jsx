@@ -3,6 +3,7 @@ import React, { useState, useRef } from "react";
 import { Outlet } from "react-router-dom";
 import { ProductModal } from "../context/ProductModal.jsx";
 import { useCart } from "../context/CartContext.js";
+import Footer from "../context/Footer"; // <--- 1. IMPORTAMOS EL FOOTER
 import {
   FaMusic,
   FaPause,
@@ -43,16 +44,15 @@ const Layout = () => {
 
   return (
     <div className="app-container">
-      {/* --- ¡AQUÍ ESTÁN LOS METEORITOS QUE FALTABAN! --- */}
+      {/* --- METEORITOS --- */}
       <div className="meteor-container">
         <div className="meteor"></div>
         <div className="meteor"></div>
         <div className="meteor"></div>
         <div className="meteor"></div>
       </div>
-      {/* ----------------------------------------------- */}
 
-      {/* 1. BOTÓN FLOTANTE DEL CARRITO (Reemplaza al Header) */}
+      {/* 1. BOTÓN FLOTANTE DEL CARRITO */}
       <div className="icon-container" onClick={toggleCart}>
         <div className="icon">
           <FaShoppingCart />
@@ -126,13 +126,15 @@ const Layout = () => {
         <Outlet />
       </main>
 
+      {/* --- 3. AQUÍ AGREGAMOS EL FOOTER --- */}
+      <Footer />
+
       {/* COMPONENTES GLOBALES */}
       <ProductModal />
 
       {/* Reproductor de Música */}
       <div style={musicStyles.container}>
         <audio ref={audioRef} loop>
-          {/* Asegúrate de que musica.mp3 esté en la carpeta 'public' */}
           <source src="/musica.mp3" type="audio/mp3" />
         </audio>
         <button onClick={togglePlay} style={musicStyles.button}>
@@ -140,7 +142,7 @@ const Layout = () => {
         </button>
       </div>
 
-      {/* Notificación Toast (Alerta verde) */}
+      {/* Notificación Toast */}
       {notification.show && (
         <div style={toastStyles}>✅ {notification.message}</div>
       )}
@@ -148,7 +150,7 @@ const Layout = () => {
   );
 };
 
-// Estilos inline para los controles flotantes (Música y Alerta)
+// Estilos inline
 const musicStyles = {
   container: { position: "fixed", bottom: "20px", left: "20px", zIndex: 3000 },
   button: {

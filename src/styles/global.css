@@ -1274,3 +1274,75 @@ p {
     border-radius: 10px;
   }
 }
+/* =======================================================
+   ESTILOS DEL FOOTER (PIE DE PÁGINA)
+   ======================================================= */
+.site-footer {
+  background: #050510; /* Casi negro, más oscuro que el fondo */
+  border-top: 1px solid rgba(212, 175, 55, 0.3); /* Línea dorada sutil */
+  padding: 50px 20px 20px;
+  margin-top: 60px; /* Separación del contenido principal */
+  text-align: center;
+  position: relative;
+  z-index: 10;
+}
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 50px;
+  max-width: 1000px;
+  margin: 0 auto 40px;
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 200px;
+}
+
+.footer-section h4 {
+  color: var(--accent-color);
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.footer-section p {
+  color: #aaa;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.footer-section p.highlight {
+  color: white;
+  font-weight: bold;
+}
+
+.footer-btn {
+  background: transparent;
+  border: 1px solid var(--accent-color);
+  color: var(--accent-color);
+  padding: 8px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  margin-top: 5px;
+}
+
+.footer-btn:hover {
+  background: var(--accent-color);
+  color: black;
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 20px;
+  font-size: 0.8rem;
+  color: #555;
+}
