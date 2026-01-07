@@ -94,7 +94,7 @@ const Index = () => {
           {/* VENENOS - IMAGEN AGREGADA */}
           <Link to="/venenos" className="arsenal-item">
             <img
-              src="https://images.unsplash.com/photo-1584634731339-252c581abfc5?auto=format&fit=crop&q=80&w=400"
+              src="https://placehold.co/400x300/1a1a2e/d4af37?text=Venenos+y+Control"
               alt="Defensa contra villanos"
             />
             <h3>Defensa contra villanos</h3>
