@@ -3,24 +3,24 @@ import React, { useState, useEffect } from "react";
 import { useProducts } from "../context/ProductContext.js";
 import { useCart } from "../context/CartContext.js";
 
-// --- SUB-COMPONENTE: FILA DE VARIACIÓN CON CÁLCULO DE CARRITO ---
+// --- SUB-COMPONENTE: FILA DE VARIACIÓN ---
 const VariationRow = ({ product, variation, onAdd }) => {
-  const { cart } = useCart(); // Necesitamos leer el carrito aquí
+  const { cart } = useCart();
   const [qty, setQty] = useState(1);
 
-  // 1. Buscamos si este producto YA está en el carrito
-  // La clave debe coincidir con cómo la genera el CartContext: `${nombre}-${variacion}`
+  // Clave única para encontrar el item en el carrito
   const itemKey = `${product.nombre}-${variation.value}`;
   const itemInCart = cart.find((item) => item.key === itemKey);
   const qtyInCart = itemInCart ? itemInCart.quantity : 0;
 
-  // 2. Calculamos el Stock Real TOTAL
-  const totalStock = product.stock !== undefined ? product.stock : 0;
+  // LEER STOCK: Prioridad a la variación, sino al general
+  const totalStock =
+    variation.stock !== undefined ? variation.stock : product.stock || 0;
 
-  // 3. Calculamos cuánto queda DISPONIBLE para agregar AHORA
+  // Calcular disponible real
   const availableStock = totalStock - qtyInCart;
 
-  // Si la cantidad seleccionada supera lo disponible (porque acabamos de agregar), la bajamos a 1
+  // Ajustar cantidad si supera el disponible al renderizar
   useEffect(() => {
     if (qty > availableStock && availableStock > 0) {
       setQty(1);
@@ -34,7 +34,6 @@ const VariationRow = ({ product, variation, onAdd }) => {
 
   const handleSumar = (e) => {
     e.stopPropagation();
-    // SOLO suma si no nos pasamos de lo que queda disponible
     if (qty < availableStock) {
       setQty(qty + 1);
     }
@@ -43,11 +42,10 @@ const VariationRow = ({ product, variation, onAdd }) => {
   const handleAgregar = (e) => {
     e.stopPropagation();
     onAdd(product.nombre, variation.value, variation.precio, qty, totalStock);
-    // No hace falta resetear qty manual, el useEffect lo ajustará si cambia el availableStock
     setQty(1);
   };
 
-  // CASO A: STOCK TOTAL 0 (Nunca hubo)
+  // CASO A: AGOTADO (Stock total 0)
   if (totalStock <= 0) {
     return (
       <div
@@ -75,7 +73,7 @@ const VariationRow = ({ product, variation, onAdd }) => {
     );
   }
 
-  // CASO B: YA TIENES TODO EL STOCK EN EL CARRITO
+  // CASO B: LÍMITE ALCANZADO EN CARRITO
   if (availableStock <= 0) {
     return (
       <div className="variation-card" style={{ borderColor: "#d4af37" }}>
@@ -95,7 +93,7 @@ const VariationRow = ({ product, variation, onAdd }) => {
             margin: "15px 0",
           }}
         >
-          ✅ Máximo alcanzado en carrito ({qtyInCart}/{totalStock})
+          ✅ Máximo alcanzado ({qtyInCart}/{totalStock})
         </div>
 
         <button
@@ -109,7 +107,7 @@ const VariationRow = ({ product, variation, onAdd }) => {
     );
   }
 
-  // CASO C: HAY STOCK DISPONIBLE PARA AGREGAR
+  // CASO C: DISPONIBLE
   return (
     <div className="variation-card">
       <h3>
@@ -117,15 +115,11 @@ const VariationRow = ({ product, variation, onAdd }) => {
       </h3>
       <div className="price">${variation.precio.toLocaleString()}</div>
 
-      {/* Selector de Cantidad */}
       <div className="qty-selector">
         <button onClick={handleRestar} className="qty-btn">
           -
         </button>
-
         <span className="qty-value">{qty}</span>
-
-        {/* Deshabilitamos el + si llegamos al tope disponible */}
         <button
           onClick={handleSumar}
           className="qty-btn"
@@ -138,7 +132,6 @@ const VariationRow = ({ product, variation, onAdd }) => {
         </button>
       </div>
 
-      {/* Aviso inteligente de stock */}
       <div
         style={{
           fontSize: "0.8rem",
@@ -148,17 +141,17 @@ const VariationRow = ({ product, variation, onAdd }) => {
         }}
       >
         Disponibles: {availableStock}{" "}
-        {qtyInCart > 0 && `(Tenés ${qtyInCart} en el carrito)`}
+        {qtyInCart > 0 && `(En carrito: ${qtyInCart})`}
       </div>
 
       <button className="add-to-cart-btn" onClick={handleAgregar}>
-        Agregar {qty} {qty > 1 ? "unidades" : "unidad"}
+        Agregar {qty}
       </button>
     </div>
   );
 };
 
-// --- COMPONENTE PRINCIPAL DEL MODAL ---
+// --- COMPONENTE PRINCIPAL ---
 export const ProductModal = () => {
   const { selectedProduct, closeModal } = useProducts();
   const { addToCart } = useCart();
