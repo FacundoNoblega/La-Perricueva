@@ -65,7 +65,7 @@ const Index = () => {
               src="https://images.unsplash.com/photo-1568640347023-a616a30bc3bd?auto=format&fit=crop&q=80&w=400"
               alt="Energía de combate"
             />
-            <h3>Energía de combate</h3>
+            <h3>Alimentos</h3>
             <p>Proteínas, vitaminas y sabor para misiones diarias.</p>
           </Link>
 
@@ -75,7 +75,7 @@ const Index = () => {
               src="https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&q=80&w=400"
               alt="Rituales de poder"
             />
-            <h3>Rituales de poder</h3>
+            <h3>Higiene</h3>
             <p>Shampoos, perfumes y tratamientos para mantener su fuerza.</p>
           </Link>
 
@@ -85,7 +85,7 @@ const Index = () => {
               src="https://images.unsplash.com/photo-1576201836106-db1758fd1c97?auto=format&fit=crop&q=80&w=400"
               alt="Armadura y herramientas"
             />
-            <h3>Armadura y herramientas</h3>
+            <h3>Accesorios</h3>
             <p>
               Collares resistentes, camas cómodas, juguetes indestructibles.
             </p>
@@ -94,7 +94,7 @@ const Index = () => {
           {/* VENENOS - IMAGEN AGREGADA */}
           <Link to="/venenos" className="arsenal-item">
             <img
-              src="https://images.unsplash.com/photo-1535930891776-0c2dfb7cda4d?auto=format&fit=crop&q=80&w=400"
+              src="https://images.unsplash.com/photo-1561948955-570b270e7c36?auto=format&fit=crop&q=80&w=400"
               alt="Defensa contra villanos"
             />
             <h3>Defensa contra villanos</h3>
