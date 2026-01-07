@@ -1,7 +1,7 @@
 // src/context/ProductContext.js
 import React, { createContext, useState, useEffect, useContext } from "react";
 
-// ... (Configuración de Airtable) ...
+// ... Configuración de Airtable ...
 const AIRTABLE_TOKEN =
   "patKuJCosiQZOwtbX.b3a33c79955282a8090d27589c0e7d0098aabf3092e943a9c1f469be75f51d6e";
 const AIRTABLE_BASE_ID = "appcxfwzR2iZkPXT3";
@@ -11,52 +11,76 @@ const ProductContext = createContext();
 
 export const useProducts = () => useContext(ProductContext);
 
-// --- PROCESAMIENTO DE DATOS ---
+// --- PROCESAMIENTO INTELIGENTE DE DATOS ---
 const processAirtableData = (allProductsRaw) => {
-  const products = {};
+  const productsMap = {};
 
   try {
     allProductsRaw.forEach((product) => {
-      if (!product || !product.nombre) {
-        return;
+      // 1. DETECTAR EL NOMBRE (Tu columna principal se llama 'id')
+      // Buscamos 'id', o 'nombre', o 'Nombre' por seguridad
+      const nombreRaw = product.id || product.nombre || product.Nombre;
+
+      if (!nombreRaw) return; // Si no hay nombre, saltamos
+
+      const nombre = nombreRaw.trim();
+
+      // 2. LEER LA ESPECIE/CATEGORIA (Tu columna se llama 'categoria': 'perros', 'gatos')
+      // Ojo: Airtable a veces devuelve esto como un array si es un "Select Múltiple"
+      let especie = "General";
+      if (product.categoria) {
+        // Si es un array (select múltiple), tomamos el primero, si es texto, lo usamos directo
+        especie = Array.isArray(product.categoria)
+          ? product.categoria[0]
+          : product.categoria;
       }
 
-      const nombre = product.nombre;
+      // Normalizamos a minúsculas por las dudas
+      especie = especie.toString().toLowerCase().trim();
 
-      // Crear el producto si no existe
-      if (!products[nombre]) {
-        products[nombre] = {
-          // 'id' se asignará más abajo
-          nombre: nombre,
-          categoria: product.categoria,
+      // 3. CREAR CLAVE DE AGRUPACIÓN (Nombre + Especie)
+      // Esto es lo que separa "Old Prince" de Perros vs Gatos
+      const groupKey = `${nombre}|${especie}`;
+
+      // Crear el producto si no existe en el mapa
+      if (!productsMap[groupKey]) {
+        // Decidimos qué nombre mostrar en la tarjeta
+        // Si el nombre ya incluye la especie (ej: "Carnix Perro Adulto"), lo dejamos así.
+        // Si el nombre es genérico (ej: "Old Prince"), le agregamos "(Perros)" para que se entienda.
+        let displayNombre = nombre;
+        if (!nombre.toLowerCase().includes(especie) && especie !== "general") {
+          // Capitalizamos la primera letra de la especie (perros -> Perros)
+          const especieCap = especie.charAt(0).toUpperCase() + especie.slice(1);
+          displayNombre = `${nombre} (${especieCap})`;
+        }
+
+        productsMap[groupKey] = {
+          id: product.id,
+          nombre: displayNombre,
+          nombreOriginal: nombre,
+          categoria: especie, // Guardamos 'perros', 'gatos', etc.
           descripcion: product.descripcion,
-          imagen: product.imagen,
+          imagen: null,
           variaciones: [],
-          categoria_app: product.categoria_app,
+          categoria_app: product.categoria_app, // La pestaña (Alimentos, Higiene...)
 
-          // ==========================================================
-          // NUEVO: LEER EL STOCK DESDE AIRTABLE
-          // Si la celda está vacía, asumimos 0 para evitar errores
-          // ==========================================================
+          // LEER STOCK (Tu columna es 'Stock' con mayúscula según la imagen)
           stock: product.Stock || 0,
         };
 
-        // Manejo de imágenes (Array o String)
+        // Manejo de imagen (Tu columna es 'imagen' con minúscula)
         if (Array.isArray(product.imagen) && product.imagen.length > 0) {
-          products[nombre].imagen = product.imagen[0].url;
+          productsMap[groupKey].imagen = product.imagen[0].url;
         } else {
-          products[nombre].imagen = product.imagen;
+          productsMap[groupKey].imagen = product.imagen;
         }
       }
 
-      // Validamos el precio de ESTA VARIACIÓN
+      // 4. PROCESAR VARIACIÓN (Peso/Talla/Precio)
+      // Tus columnas son 'precio', 'peso', 'talla' (minúsculas)
       const precio = parseFloat(product.precio);
+      if (isNaN(precio) || precio === 0) return;
 
-      if (isNaN(precio) || precio === 0) {
-        return;
-      }
-
-      // Si el precio es válido (> 0), añadimos la variación
       let key = "";
       let value = "";
 
@@ -66,10 +90,18 @@ const processAirtableData = (allProductsRaw) => {
       } else if (product.talla) {
         key = "Talla";
         value = product.talla;
+      } else {
+        key = "Opción";
+        value = "Única";
       }
 
-      if (value) {
-        products[nombre].variaciones.push({
+      // Evitamos duplicados de variaciones
+      const existeVar = productsMap[groupKey].variaciones.find(
+        (v) => v.value === value
+      );
+
+      if (!existeVar && value) {
+        productsMap[groupKey].variaciones.push({
           key: key,
           value: value,
           precio: precio,
@@ -80,22 +112,11 @@ const processAirtableData = (allProductsRaw) => {
     throw new Error(`Error procesando los datos: ${err.message}`);
   }
 
-  // Ahora asignamos el ID único al producto agrupado
-  const groupedProducts = Object.values(products);
-
-  // Asignamos el ID único basado en el primer producto raw encontrado
-  const finalProducts = groupedProducts.map((prod) => {
-    const rawProduct = allProductsRaw.find((p) => p.nombre === prod.nombre);
-    return {
-      ...prod,
-      id: rawProduct.id,
-    };
-  });
-
-  return finalProducts;
+  // Convertimos el mapa a array
+  return Object.values(productsMap);
 };
 
-// --- EL PROVIDER ---
+// --- EL PROVIDER (Igual que antes, solo cambia la URL base) ---
 export const ProductProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -105,12 +126,10 @@ export const ProductProvider = ({ children }) => {
   const [higiene, setHigiene] = useState([]);
   const [venenos, setVenenos] = useState([]);
 
-  // Estado global para el Modal
   const [selectedProduct, setSelectedProduct] = useState(null);
   const openModal = (product) => setSelectedProduct(product);
   const closeModal = () => setSelectedProduct(null);
 
-  // FETCH A AIRTABLE
   useEffect(() => {
     const fetchTable = async (tableName) => {
       let allRecords = [];
@@ -118,40 +137,28 @@ export const ProductProvider = ({ children }) => {
       const baseUrl = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(
         tableName
       )}`;
-
-      const params = new URLSearchParams({
-        pageSize: "100",
-        view: "APIView",
-      });
+      const params = new URLSearchParams({ pageSize: "100", view: "APIView" });
 
       try {
         do {
-          if (offset) {
-            params.set("offset", offset);
-          } else {
-            params.delete("offset");
-          }
+          if (offset) params.set("offset", offset);
+          else params.delete("offset");
 
-          const fetchUrl = `${baseUrl}?${params.toString()}`;
-
-          const response = await fetch(fetchUrl, {
-            headers: {
-              Authorization: `Bearer ${AIRTABLE_TOKEN}`,
-            },
+          const response = await fetch(`${baseUrl}?${params.toString()}`, {
+            headers: { Authorization: `Bearer ${AIRTABLE_TOKEN}` },
           });
 
-          if (!response.ok) {
+          if (!response.ok)
             throw new Error(
-              `Error en Tabla: ${tableName}. (Status: ${response.statusText})`
+              `Error en Tabla ${tableName}: ${response.statusText}`
             );
-          }
 
           const jsonData = await response.json();
           allRecords.push(...jsonData.records);
           offset = jsonData.offset;
         } while (offset);
       } catch (err) {
-        console.error(`Error en fetchTable (${tableName}):`, err);
+        console.error(err);
         throw err;
       }
 
@@ -170,9 +177,8 @@ export const ProductProvider = ({ children }) => {
         const results = await Promise.all(TABLE_NAMES.map(fetchTable));
         const allProductsRaw = results.flat();
 
-        if (allProductsRaw.length === 0) {
-          throw new Error("No se encontraron productos en Airtable.");
-        }
+        if (allProductsRaw.length === 0)
+          throw new Error("No hay productos en Airtable.");
 
         const allProducts = processAirtableData(allProductsRaw);
 
